@@ -19,6 +19,12 @@ RSpec.describe RuboCop::Cop::Lint::EmptyClass, :config do
         end
       end
     RUBY
+
+    expect_correction(<<~RUBY)
+      class Foo
+       #{trailing_whitespace}
+      end
+    RUBY
   end
 
   it 'registers an offense for empty object metaclass' do
@@ -27,6 +33,8 @@ RSpec.describe RuboCop::Cop::Lint::EmptyClass, :config do
       ^^^^^^^^^^^^ Empty metaclass detected.
       end
     RUBY
+
+    expect_correction("\n")
   end
 
   it 'registers an offense when empty metaclass contains only comments' do
@@ -36,6 +44,12 @@ RSpec.describe RuboCop::Cop::Lint::EmptyClass, :config do
         ^^^^^^^^^^^^^ Empty metaclass detected.
           # Comment.
         end
+      end
+    RUBY
+
+    expect_correction(<<~RUBY)
+      class Foo
+       #{trailing_whitespace}
       end
     RUBY
   end

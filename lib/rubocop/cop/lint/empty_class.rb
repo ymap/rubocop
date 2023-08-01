@@ -70,6 +70,8 @@ module RuboCop
       #   end
       #
       class EmptyClass < Base
+        extend AutoCorrector
+
         CLASS_MSG = 'Empty class detected.'
         METACLASS_MSG = 'Empty metaclass detected.'
 
@@ -79,7 +81,9 @@ module RuboCop
         end
 
         def on_sclass(node)
-          add_offense(node, message: METACLASS_MSG) unless body_or_allowed_comment_lines?(node)
+          unless body_or_allowed_comment_lines?(node)
+            add_offense(node, message: METACLASS_MSG) { |corrector| corrector.remove(node) }
+          end
         end
 
         private
